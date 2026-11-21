@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Sign Up</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial;
+    background: linear-gradient(135deg,#667eea,#764ba2,#f093fb);
+}
+.card {
+    background: white;
+    padding: 35px;
+    width: 320px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px #3335;
+}
+h1 { color: #764ba2; }
+input {
+    width: 100%;
+    padding: 13px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    box-sizing: border-box;
+}
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg,#667eea,#c471ed);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+#message { color: #764ba2; }
+</style>
+</head>
+
+<body>
+<div class="card">
+<h1>🎓 Welcome!</h1>
+<p>Create Your Student Account</p>
+
+<form id="signupForm">
+<input id="name" placeholder="Full Name" required>
+<input id="email" type="email" placeholder="Email Address" required>
+<input id="password" type="password"
+placeholder="Create Password" minlength="6" required>
+<button type="submit">Create Account</button>
+</form>
+
+<p id="message"></p>
+</div>
+
+<script type="module">
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import { getAuth, createUserWithEmailAndPassword }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+document.getElementById("signupForm")
+.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const message = document.getElementById("message");
+    message.textContent = "Creating account...";
+
+    try {
+        const result = await createUserWithEmailAndPassword(
+            auth, email, password
+        );
+
+        localStorage.setItem("studentName", name);
+        localStorage.setItem("studentEmail", email);
+
+        window.location.href = "enrollment.html";
+
+    } catch(error) {
+        message.textContent = error.message;
+    }
+});
+</script>
+</body>
+</html>
